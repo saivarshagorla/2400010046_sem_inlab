@@ -1,0 +1,62 @@
+// AddPost.js
+import React, { useState } from 'react';
+import axios from 'axios';
+
+const AddPost = () => {
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent page reload
+
+    const postData = { title, body };
+
+    try {
+      const response = await axios.post(
+        'https://jsonplaceholder.typicode.com/posts',
+        postData
+      );
+      console.log('Response:', response.data);
+      setMessage('Post submitted successfully!');
+      setTitle('');
+      setBody('');
+    } catch (error) {
+      console.error('Error:', error);
+      setMessage('Failed to submit post.');
+    }
+  };
+
+  return (
+    <div style={{ maxWidth: '500px', margin: '20px auto' }}>
+      <h2>Add Post</h2>
+      <form onSubmit={handleSubmit}>
+        <div style={{ marginBottom: '10px' }}>
+          <label>Title:</label>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+          />
+        </div>
+        <div style={{ marginBottom: '10px' }}>
+          <label>Body:</label>
+          <textarea
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            required
+            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+          />
+        </div>
+        <button type="submit" style={{ padding: '10px 20px' }}>
+          Submit
+        </button>
+      </form>
+      {message && <p style={{ marginTop: '10px', color: 'green' }}>{message}</p>}
+    </div>
+  );
+};
+
+export default AddPost;
